@@ -23,7 +23,6 @@ def execution():
             solar_vis.update_object_position(space, body)
         physical_time += time_step.get()
         displayed_time.set(f"{physical_time:.1f} seconds gone")
-        # Скорость регулируется ползунком
         space.after(101 - int(time_speed.get()), execution)
 
 def start_execution():
@@ -55,12 +54,12 @@ def open_file_dialog():
     space_objects = read_space_objects_data_from_file(in_filename)
     solar_vis.calculate_scale_factor(1000)
 
-    # Рисуем планеты (и их орбиты со спутниками)
+    # Шаг 1: Отрисовываем нижний слой (орбиты, планеты, спутники)
     for obj in space_objects:
         if obj.type == 'planet':
             solar_vis.create_planet_image(space, obj)
             
-    # Рисуем звёзды поверх планет
+    # Шаг 2: Накладываем звёзды поверх планет, чтобы избежать визуальных артефактов
     for obj in space_objects:
         if obj.type == 'star':
             solar_vis.create_star_image(space, obj)
@@ -71,7 +70,6 @@ def save_file_dialog():
         write_space_objects_data_to_file(out_filename, space_objects)
 
 def toggle_orbits():
-    """Команда чекбокса для скрытия/показа линий орбит."""
     solar_vis.set_orbits_visibility(space, space_objects, show_orbits.get())
 
 def main():
@@ -80,15 +78,14 @@ def main():
     root = tkinter.Tk()
     root.title("Солнечная система — Билет №5")
 
-    space = tkinter.Canvas(root, width=solar_vis.window_width, height=solar_vis.window_height, bg="black")
-    space.pack(side=tkinter.TOP)
-
+    # Перемещение панели управления НАВЕРХ, чтобы гарантировать видимость кнопок
     frame = tkinter.Frame(root, bg="#1a1a1a")
-    frame.pack(side=tkinter.BOTTOM, fill=tkinter.X)
+    frame.pack(side=tkinter.TOP, fill=tkinter.X, ipady=4)
 
-    start_button = tkinter.Button(frame, text="Start", command=start_execution, width=6)
+    start_button = tkinter.Button(frame, text="Start", command=start_execution, width=8)
     start_button.pack(side=tkinter.LEFT, padx=5, pady=5)
 
+    tkinter.Label(frame, text="Шаг времени (DT):", bg="#1a1a1a", fg="white").pack(side=tkinter.LEFT, padx=2)
     time_step = tkinter.DoubleVar()
     time_step.set(1.0)
     time_step_entry = tkinter.Entry(frame, textvariable=time_step, width=6)
@@ -96,17 +93,17 @@ def main():
 
     time_speed = tkinter.DoubleVar()
     time_speed.set(70.0)
-    scale = tkinter.Scale(frame, variable=time_speed, orient=tkinter.HORIZONTAL, from_=1, to=100, label="Speed")
+    scale = tkinter.Scale(frame, variable=time_speed, orient=tkinter.HORIZONTAL, from_=1, to=100, label="Скорость", bg="#1a1a1a", fg="white", highlightthickness=0)
     scale.pack(side=tkinter.LEFT, padx=5)
 
-    load_file_button = tkinter.Button(frame, text="Open file...", command=open_file_dialog)
+    load_file_button = tkinter.Button(frame, text="Открыть файл...", command=open_file_dialog)
     load_file_button.pack(side=tkinter.LEFT, padx=5)
 
-    # Чекбокс управления видимостью орбит (из условий Билета №5)
+    # Чекбокс управления видимостью орбит согласно ТЗ
     show_orbits = tkinter.BooleanVar(value=True)
     orbit_check = tkinter.Checkbutton(
-        frame, text="Орбиты", variable=show_orbits, command=toggle_orbits,
-        bg="#1a1a1a", fg="white", selectcolor="#333333", activebackground="#1a1a1a"
+        frame, text="Отображать орбиты", variable=show_orbits, command=toggle_orbits,
+        bg="#1a1a1a", fg="white", selectcolor="#333333", activebackground="#1a1a1a", activeforeground="white"
     )
     orbit_check.pack(side=tkinter.LEFT, padx=10)
 
@@ -114,6 +111,10 @@ def main():
     displayed_time.set("0.0 seconds gone")
     time_label = tkinter.Label(frame, textvariable=displayed_time, width=20, bg="#1a1a1a", fg="white")
     time_label.pack(side=tkinter.RIGHT, padx=5)
+
+    # Холст размещается под панелью управления
+    space = tkinter.Canvas(root, width=solar_vis.window_width, height=solar_vis.window_height, bg="black")
+    space.pack(side=tkinter.BOTTOM)
 
     root.mainloop()
 
