@@ -2,8 +2,8 @@
 # license: GPLv3
 
 header_font = "Arial-16"
-window_width = 800
-window_height = 800
+window_width = 1000
+window_height = 900
 scale_factor = 1.0
 show_orbits_global = True
 
