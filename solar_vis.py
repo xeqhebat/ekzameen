@@ -2,7 +2,7 @@
 # license: GPLv3
 
 header_font = "Arial-16"
-window_width = 1000
+window_width = 900
 window_height = 900
 scale_factor = 1.0
 show_orbits_global = True
@@ -29,7 +29,7 @@ def create_planet_image(space, planet):
     sy = scale_y(planet.star.y)
     r_orbit = planet.orbit_radius
     
-    # Исправлена геометрия bounding box (sy + r_orbit)
+    #Геометрия
     state = "normal" if show_orbits_global else "hidden"
     planet.orbit_image = space.create_oval(
         sx - r_orbit, sy - r_orbit,
@@ -70,7 +70,7 @@ def update_object_position(space, body):
         r = body.R
         space.coords(body.image, cx - r, cy - r, cx + r, cy + r)
         
-        # Обновление позиций спутников планеты
+        # Обновление позиций спутников
         for m_img, moon in zip(body.moon_images, body.moons):
             mx = scale_x(moon.x)
             my = scale_y(moon.y)

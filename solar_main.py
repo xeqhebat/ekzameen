@@ -54,12 +54,12 @@ def open_file_dialog():
     space_objects = read_space_objects_data_from_file(in_filename)
     solar_vis.calculate_scale_factor(1000)
 
-    # Шаг 1: Отрисовываем нижний слой (орбиты, планеты, спутники)
+    #Отрисовываем нижний слой (орбиты, планеты, спутники)
     for obj in space_objects:
         if obj.type == 'planet':
             solar_vis.create_planet_image(space, obj)
             
-    # Шаг 2: Накладываем звёзды поверх планет, чтобы избежать визуальных артефактов
+    #Накладываем звёзды
     for obj in space_objects:
         if obj.type == 'star':
             solar_vis.create_star_image(space, obj)
@@ -78,7 +78,7 @@ def main():
     root = tkinter.Tk()
     root.title("Солнечная система — Билет №5")
 
-    # Перемещение панели управления НАВЕРХ, чтобы гарантировать видимость кнопок
+    #Панель управления
     frame = tkinter.Frame(root, bg="#1a1a1a")
     frame.pack(side=tkinter.TOP, fill=tkinter.X, ipady=4)
 
@@ -99,7 +99,7 @@ def main():
     load_file_button = tkinter.Button(frame, text="Открыть файл...", command=open_file_dialog)
     load_file_button.pack(side=tkinter.LEFT, padx=5)
 
-    # Чекбокс управления видимостью орбит согласно ТЗ
+    #Видимость орбит
     show_orbits = tkinter.BooleanVar(value=True)
     orbit_check = tkinter.Checkbutton(
         frame, text="Отображать орбиты", variable=show_orbits, command=toggle_orbits,
@@ -112,7 +112,7 @@ def main():
     time_label = tkinter.Label(frame, textvariable=displayed_time, width=20, bg="#1a1a1a", fg="white")
     time_label.pack(side=tkinter.RIGHT, padx=5)
 
-    # Холст размещается под панелью управления
+    # Холст
     space = tkinter.Canvas(root, width=solar_vis.window_width, height=solar_vis.window_height, bg="black")
     space.pack(side=tkinter.BOTTOM)
 

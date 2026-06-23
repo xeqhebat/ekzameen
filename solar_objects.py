@@ -31,15 +31,15 @@ class Planet:
         self.color = "green"
         self.image = None
         
-        # Параметры орбитального движения Билета №5
+        # Параметры
         self.star = None          # Ссылка на родительскую звезду
-        self.orbit_number = 0     # Номер орбиты (от 1)
-        self.orbit_radius = 0     # Радиус орбиты в пикселях
+        self.orbit_number = 0     # Номер орбиты
+        self.orbit_radius = 0     # Радиус орбиты
         self.angle = 0.0          # Текущий полярный угол
         self.speed = 0.0          # Угловая скорость движения
-        self.orbit_image = None   # Графический ID линии орбиты
-        self.moons = []           # Список объектов-спутников
-        self.moon_images = []     # Графические ID кружков спутников
+        self.orbit_image = None   # Графический ID орбиты
+        self.moons = []           # Список спутников
+        self.moon_images = []     # Графические ID спутников
 
 class Moon:
     """Тип данных, описывающий спутник планеты."""
@@ -49,6 +49,6 @@ class Moon:
         self.y = 0
         self.R = 2
         self.color = "white"
-        self.orbit_radius = 0     # Радиус обращения вокруг планеты
+        self.orbit_radius = 0     # Радиус обращения
         self.angle = 0.0          # Текущий угол спутника
         self.speed = 0.0          # Угловая скорость спутника
