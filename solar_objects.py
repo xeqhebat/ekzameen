@@ -37,9 +37,9 @@ class Planet:
         self.Fy    = 0        # Сила по оси y
         self.R     = 4        # Радиус планеты в пикселах
         self.color = "green"  # Цвет планеты
-        self.image = None     # Графический ID кружка планеты
+        self.image = None     # Графический ID планеты
 
-        # Параметры кинематической орбиты
+        # Параметры орбиты
         self.star         = None  # Ссылка на родительскую звезду
         self.orbit_number = 0     # Номер орбиты
         self.orbit_radius = 0     # Радиус орбиты
@@ -47,7 +47,7 @@ class Planet:
         self.speed        = 0.0   # Угловая скорость
         self.orbit_image  = None  # Графический ID орбиты
         self.moons        = []    # Список спутников
-        self.moon_images  = []    # Графические ID спутников
+        self.moon_images  = []    # Графические ID спутника
 
 
 class Moon:

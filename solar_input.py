@@ -50,8 +50,8 @@ def read_space_objects_data_from_file(input_filename):
         "#ba68c8", "#4dd0e1", "#aed581", "#ff8a65",
     ]
 
-    base_orbit_distance = 40   # радиус первой орбиты
-    orbit_gap           = 25   # расстояние между орбитами
+    base_orbit_distance = 40
+    orbit_gap           = 25
 
     for idx, star in enumerate(stars):
         if idx >= len(configs):

@@ -35,8 +35,9 @@ def execution():
         return
 
     recalculate_space_objects_positions(space_objects, time_step.get())
-    for body in space_objects:
-        solar_vis.update_object_position(space, body)
+    
+    # Обновляем объекты
+    solar_vis.update_all_objects(space, space_objects, time_step.get())
 
     physical_time += time_step.get()
     displayed_time.set(f"{physical_time:.1f} seconds gone")
@@ -45,26 +46,27 @@ def execution():
 
 
 def start_execution():
-    """Запускаем симуляцию"""
+    """Запускает симуляцию"""
     global perform_execution
     if not perform_execution:
         perform_execution = True
-        start_button["text"] = "Pause"
+        start_button["text"]    = "Pause"
         start_button["command"] = stop_execution
         execution()
 
 
 def stop_execution():
-    """Останавливаем симуляцию """
+    """Останавливаем симуляцию"""
     global perform_execution
     perform_execution = False
-    start_button["text"] = "Start"
+    start_button["text"]    = "Start"
     start_button["command"] = start_execution
 
 
 # Файлы
+
 def open_file_dialog():
-    """Открываем файли."""
+    """Открываем файл"""
     global space_objects, physical_time
 
     stop_execution()
@@ -77,8 +79,14 @@ def open_file_dialog():
     if not filename:
         return
 
+    # Экран
+    solar_vis.set_background(space, solar_vis.window_width, solar_vis.window_height)
+    
     space_objects = read_space_objects_data_from_file(filename)
     solar_vis.calculate_scale_factor(1000)
+    
+    # Рисуем морковки
+    solar_vis.create_carrots(space, num_carrots=30)
 
     # Рисуем орбиты и планеты
     for obj in space_objects:
@@ -92,19 +100,18 @@ def open_file_dialog():
 
 
 def save_file_dialog():
-    """Открывает диалог сохранения и записывает текущее состояние в файл."""
+    """Сохраняем файл"""
     filename = asksaveasfilename(filetypes=(("Text file", ".txt"),))
     if filename:
         write_space_objects_data_to_file(filename, space_objects)
 
 
 def toggle_orbits():
-    """Переключает видимость орбит."""
+    """Переключаем видимость орбит"""
     solar_vis.set_orbits_visibility(space, space_objects, show_orbits.get())
 
 
 # Главная функция
-
 def main():
     """Создаёт окно, холст и панель управления, затем запускает главный цикл tkinter."""
     global displayed_time, time_step, time_speed, show_orbits
@@ -169,12 +176,15 @@ def main():
                   width=22, bg="#1a1a1a", fg="#cccccc",
                   font=("Courier", 10)).pack(side=tkinter.RIGHT, padx=6)
 
-    # Экран
+    # Холст
     space = tkinter.Canvas(root,
                            width=solar_vis.window_width,
                            height=solar_vis.window_height,
-                           bg="black")
+                           bg=solar_vis.background_color)  # ← уже используем константу
     space.pack(side=tkinter.BOTTOM)
+    
+    # Фон
+    solar_vis.set_background(space, solar_vis.window_width, solar_vis.window_height)
 
     root.mainloop()
 
