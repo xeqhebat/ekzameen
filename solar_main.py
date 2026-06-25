@@ -83,7 +83,14 @@ def open_file_dialog():
     solar_vis.set_background(space, solar_vis.window_width, solar_vis.window_height)
     
     space_objects = read_space_objects_data_from_file(filename)
-    solar_vis.calculate_scale_factor(1000)
+    
+    if space_objects:
+        max_distance = max([max(abs(obj.x), abs(obj.y)) for obj in space_objects])
+        if max_distance == 0:
+            max_distance = 1000
+        solar_vis.calculate_scale_factor(max_distance)
+    else:
+        solar_vis.calculate_scale_factor(1000)
     
     # Рисуем морковки
     solar_vis.create_carrots(space, num_carrots=30)

@@ -12,7 +12,7 @@ from PIL import Image, ImageDraw, ImageTk
 
 header_font = "Arial-16"
 
-window_width  = 900
+window_width  = 950
 window_height = 900
 
 scale_factor = 1.0
@@ -100,7 +100,10 @@ carrots = []  # Каждая морковка: {image_id: int, x: float, y: floa
 def calculate_scale_factor(max_distance):
     """Устанавливаем масштабный коэффициент."""
     global scale_factor
-    scale_factor = 1.0
+    if max_distance > 10000:
+        scale_factor = 0.4 * min(window_height, window_width) / max_distance
+    else:
+        scale_factor = 1.0
 
 
 def scale_x(x):
@@ -348,7 +351,7 @@ def draw_bunny_face(space, x, y, size, color):
     parts.append(right_eye)
     
     # Зрачки
-    pupil_radius = max(1, eye_radius // 3)  # было // 2, стало // 3
+    pupil_radius = max(1, eye_radius // 3)
     
     # Левый зрачок
     left_pupil = space.create_oval(
@@ -406,12 +409,13 @@ def create_planet_image(space, planet):
 
     sx = scale_x(planet.star.x)
     sy = scale_y(planet.star.y)
-    r  = planet.orbit_radius
+    
+    r_orbit = planet.orbit_radius * scale_factor
 
     # Орбита
     orbit_state = "normal" if show_orbits_global else "hidden"
     planet.orbit_image = space.create_oval(
-        sx - r, sy - r, sx + r, sy + r,
+        sx - r_orbit, sy - r_orbit, sx + r_orbit, sy + r_orbit,
         outline="#303030", width=1, state=orbit_state
     )
 
@@ -459,7 +463,7 @@ def update_object_position(space, body):
             mouth_height = size // 8
             mouth_y = y + size // 6
             
-            # Координаты для органов заяйа
+            # Координаты для органов зайца
             coords_list = [
                 # 1. Левое ухо
                 [x - size//4 - ear_width//2, ear_y - ear_height//2,
